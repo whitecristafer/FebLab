@@ -4,41 +4,31 @@ import java.util.List;
 import java.util.Map;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
-        SQLEmul starter = new SQLEmul();
+    public static void main(String[] args) {
         try {
-            List<Map<String, Object>> result1 = starter.execute(
-                    "INSERT VALUES 'lastName' = 'Федоров', 'id' = 3, 'age' = 40, 'active' = true"
-            );
-            System.out.println("Результат вставки:");
-            printResult(result1);
+            SQLEmul sqlEmul = new SQLEmul();
 
-            List<Map<String, Object>> result2 = starter.execute(
-                    "UPDATE VALUES 'active' = false, 'cost' = 10.1 WHERE 'id' = 3"
-            );
-            System.out.println("Результат обновления:");
-            printResult(result2);
+            // Вставка данных
+            System.out.println("Вставка данных:");
+            List<Map<String, Object>> resultInsert = sqlEmul.execute("INSERT VALUES id=3, active=true, age=40, lastname='Федоров'");
+            System.out.println("Результат вставки: " + resultInsert);
 
-            List<Map<String, Object>> result4 = starter.execute(
-                    "DELETE WHERE 'id' = 3"
-            );
-            System.out.println("Результат удаления:");
-            printResult(result4);
+            // Обновление данных
+            System.out.println("Обновление данных:");
+            List<Map<String, Object>> resultUpdate = sqlEmul.execute("UPDATE VALUES age=41 WHERE 'id' = 3");
+            System.out.println("Результат обновления: " + resultUpdate);
 
+            // Удаление данных
+            System.out.println("Удаление данных:");
+            List<Map<String, Object>> resultDelete = sqlEmul.execute("DELETE WHERE 'id' = 3");
+            System.out.println("Результат удаления: " + resultDelete);
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            // Проверка данных после операций
+            System.out.println("Данные после операций:");
+            List<Map<String, Object>> resultSelect = sqlEmul.execute("SELECT");
+            System.out.println("Текущие данные: " + resultSelect);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
-
-    private static void printResult(List<Map<String, Object>> result) {
-        for (Map<String, Object> row : result) {
-            for (Map.Entry<String, Object> entry : row.entrySet()) {
-                System.out.print(entry.getKey() + ": " + entry.getValue() + ", ");
-            }
-            System.out.println();
-        }
-        System.out.println();
-    }
-
 }

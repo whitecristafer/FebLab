@@ -12,6 +12,7 @@ public class SQLEmul {
     }
 
     public List<Map<String, Object>> execute(String request) throws Exception {
+        System.out.println("Executing request: " + request); // Debug print
         String normalizedRequest = request.trim().replaceAll("\\s+", " ");
         Command command = parseCommand(normalizedRequest);
         switch (command.type) {
@@ -157,6 +158,7 @@ public class SQLEmul {
     private List<Map<String, Object>> processInsert(Command command) throws Exception {
         Map<String, Object> newRow = new HashMap<>(command.values);
         data.add(newRow);
+        System.out.println("Data after insert: " + data); // Debug print
         return Collections.singletonList(new HashMap<>(newRow));
     }
 
@@ -177,6 +179,7 @@ public class SQLEmul {
                 updatedRows.add(new HashMap<>(row));
             }
         }
+        System.out.println("Data after update: " + data); // Debug print
         return updatedRows;
     }
 
@@ -191,6 +194,7 @@ public class SQLEmul {
                 iterator.remove();
             }
         }
+        System.out.println("Data after delete: " + data);
         return rowsToDelete;
     }
 
@@ -214,7 +218,6 @@ public class SQLEmul {
         }
         boolean result = evaluateCondition(row, conditions.get(0));
         for (int i = 1; i < conditions.size(); i++) {
-            // Simplified logical operators handling (assumes implicit AND if not specified)
             result = result && evaluateCondition(row, conditions.get(i));
         }
         return result;
