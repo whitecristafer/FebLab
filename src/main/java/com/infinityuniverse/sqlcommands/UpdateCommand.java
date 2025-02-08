@@ -1,6 +1,7 @@
 package com.infinityuniverse.sqlcommands;
 
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,21 @@ import java.util.Map;
  */
 public class UpdateCommand extends Command {
 
+=======
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class UpdateCommand implements SQLCommand {
+    private Map<String, Object> values;
+    private List<Condition> whereConditions;
+
+    public UpdateCommand(Map<String, Object> values, List<Condition> whereConditions) {
+        this.values = values;
+        this.whereConditions = whereConditions;
+    }
+
+>>>>>>> 81a3ccf (Update Command for SQLEmul)
     @Override
     public List<Map<String, Object>> applyCommand(String request, List<Map<String, Object>> data) throws Exception {
         String upper = request.toUpperCase();
@@ -39,6 +55,7 @@ public class UpdateCommand extends Command {
 
         // Для каждой строки, если она соответствует условию, примените изменения
         for (Map<String, Object> row : data) {
+<<<<<<< HEAD
             if (matchesCondition(wherePart, row)) {
                 // Для каждого значения
                 for (String assignment : assignments) {
@@ -62,10 +79,27 @@ public class UpdateCommand extends Command {
                     } else {
                         row.put(col, typedVal);
                     }
+=======
+            if (matchesConditions(row)) {
+                for (Map.Entry<String, Object> entry : values.entrySet()) {
+                    row.put(entry.getKey(), entry.getValue());
+>>>>>>> 81a3ccf (Update Command for SQLEmul)
                 }
                 updatedRows.add(row);
             }
         }
         return updatedRows;
     }
+<<<<<<< HEAD
+=======
+
+    private boolean matchesConditions(Map<String, Object> row) throws Exception {
+        for (Condition condition : whereConditions) {
+            if (!condition.evaluate(row)) {
+                return false;
+            }
+        }
+        return true;
+    }
+>>>>>>> 81a3ccf (Update Command for SQLEmul)
 }
