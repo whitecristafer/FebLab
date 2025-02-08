@@ -3,7 +3,7 @@ package com.infinityuniverse.sqlcommands;
 import java.util.*;
 
 public class DeleteCommand implements SQLCommand {
-    private final List<Condition> whereConditions;
+    private List<Condition> whereConditions;
 
     public DeleteCommand(List<Condition> whereConditions) {
         this.whereConditions = whereConditions;
@@ -11,21 +11,24 @@ public class DeleteCommand implements SQLCommand {
 
     @Override
     public List<Map<String, Object>> execute(List<Map<String, Object>> data) throws Exception {
-        List<Map<String, Object>> rowsToDelete = new ArrayList<>();
+        List<Map<String, Object>> deletedRows = new ArrayList<>();
         Iterator<Map<String, Object>> iterator = data.iterator();
         while (iterator.hasNext()) {
             Map<String, Object> row = iterator.next();
-            if (matchesConditions(row, whereConditions)) {
-                rowsToDelete.add(new HashMap<>(row));
+            if (matchesConditions(row)) {
+                deletedRows.add(new HashMap<>(row));
                 iterator.remove();
             }
         }
-        System.out.println("Data after delete: " + data);
-        return rowsToDelete;
+        return deletedRows;
     }
 
-    private boolean matchesConditions(Map<String, Object> row, List<Condition> conditions) throws Exception {
-        // Implement matching logic
+    private boolean matchesConditions(Map<String, Object> row) throws Exception {
+        for (Condition condition : whereConditions) {
+            if (!condition.evaluate(row)) {
+                return false;
+            }
+        }
         return true;
     }
 }
