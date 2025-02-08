@@ -1,5 +1,6 @@
 package com.infinityuniverse.sqlcommands;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +26,34 @@ public class SelectCommand extends Command {
         for (Map<String, Object> row : data) {
             if (matchesCondition(wherePart, row)) {
                 result.add(row);
+=======
+import java.util.*;
+
+
+public class SelectCommand implements SQLCommand {
+    private final List<Condition> whereConditions;
+
+    public SelectCommand(List<Condition> whereConditions) {
+        this.whereConditions = whereConditions;
+    }
+
+    @Override
+    public List<Map<String, Object>> execute(List<Map<String, Object>> data) throws Exception {
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Map<String, Object> row : data) {
+            if (matchesConditions(row, whereConditions)) {
+                result.add(new HashMap<>(row));
+>>>>>>> master
             }
         }
         return result;
     }
+<<<<<<< HEAD
+=======
+
+    private boolean matchesConditions(Map<String, Object> row, List<Condition> conditions) throws Exception {
+        // Implement matching logic
+        return true;
+    }
+>>>>>>> master
 }

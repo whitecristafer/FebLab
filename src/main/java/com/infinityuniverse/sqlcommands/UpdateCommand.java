@@ -2,6 +2,7 @@ package com.infinityuniverse.sqlcommands;
 
 import java.util.ArrayList;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,8 @@ import java.util.Map;
 public class UpdateCommand extends Command {
 
 =======
+=======
+>>>>>>> master
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +31,7 @@ public class UpdateCommand implements SQLCommand {
         this.whereConditions = whereConditions;
     }
 
+<<<<<<< HEAD
 >>>>>>> 81a3ccf (Update Command for SQLEmul)
     @Override
     public List<Map<String, Object>> applyCommand(String request, List<Map<String, Object>> data) throws Exception {
@@ -86,12 +90,26 @@ public class UpdateCommand implements SQLCommand {
 >>>>>>> 81a3ccf (Update Command for SQLEmul)
                 }
                 updatedRows.add(row);
+=======
+    @Override
+    public List<Map<String, Object>> execute(List<Map<String, Object>> data) throws Exception {
+        List<Map<String, Object>> updatedRows = new ArrayList<>();
+        for (Map<String, Object> row : data) {
+            if (matchesConditions(row)) {
+                for (Map.Entry<String, Object> entry : values.entrySet()) {
+                    row.put(entry.getKey(), entry.getValue());
+                }
+                updatedRows.add(new HashMap<>(row));
+>>>>>>> master
             }
         }
         return updatedRows;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> master
 
     private boolean matchesConditions(Map<String, Object> row) throws Exception {
         for (Condition condition : whereConditions) {
@@ -101,5 +119,8 @@ public class UpdateCommand implements SQLCommand {
         }
         return true;
     }
+<<<<<<< HEAD
 >>>>>>> 81a3ccf (Update Command for SQLEmul)
+=======
+>>>>>>> master
 }

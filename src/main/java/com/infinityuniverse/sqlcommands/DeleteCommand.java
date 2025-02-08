@@ -1,5 +1,6 @@
 package com.infinityuniverse.sqlcommands;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,10 @@ public class DeleteCommand extends Command {
         }
         return removed;
 =======
+=======
+import java.util.*;
+
+>>>>>>> master
 public class DeleteCommand implements SQLCommand {
     private List<Condition> whereConditions;
 
@@ -63,6 +68,9 @@ public class DeleteCommand implements SQLCommand {
             }
         }
         return true;
+<<<<<<< HEAD
 >>>>>>> 81a3ccf (Update Command for SQLEmul)
+=======
+>>>>>>> master
     }
 }
