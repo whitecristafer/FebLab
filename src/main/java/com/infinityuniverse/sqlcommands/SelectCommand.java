@@ -16,15 +16,15 @@ public class SelectCommand implements SQLCommand {
     public List<Map<String, Object>> execute(List<Map<String, Object>> data) throws Exception {
         List<Map<String, Object>> result = new ArrayList<>();
         for (Map<String, Object> row : data) {
-            if (matchesConditions(row, whereConditions)) {
+            if (matchesConditions(row)) {
                 result.add(new HashMap<>(row));
             }
         }
         return result;
     }
 
-    private boolean matchesConditions(Map<String, Object> row, List<Condition> conditions) throws Exception {
-        for (Condition condition : conditions) {
+    private boolean matchesConditions(Map<String, Object> row) throws Exception {
+        for (Condition condition : whereConditions) {
             if (!condition.evaluate(row)) {
                 return false;
             }

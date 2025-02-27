@@ -24,14 +24,15 @@ public class UpdateCommand implements SQLCommand {
     @Override
     public List<Map<String, Object>> execute(List<Map<String, Object>> data) throws Exception {
         List<Map<String, Object>> updatedRows = new ArrayList<>();
+
         for (Map<String, Object> row : data) {
             if (matchesConditions(row)) {
-                for (Map.Entry<String, Object> entry : values.entrySet()) {
-                    row.put(entry.getKey(), entry.getValue());
-                }
-                updatedRows.add(new HashMap<>(row));
+                Map<String, Object> newRow = new HashMap<>(row);
+                newRow.putAll(values);
+                updatedRows.add(newRow);
             }
         }
+        System.out.println("Data after update: " + updatedRows); // Debug print
         return updatedRows;
     }
 
