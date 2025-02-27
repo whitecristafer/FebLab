@@ -1,91 +1,21 @@
 package com.infinityuniverse;
 
-<<<<<<< HEAD
-import com.infinityuniverse.sqlcommands.Command;
-import com.infinityuniverse.sqlcommands.DeleteCommand;
-import com.infinityuniverse.sqlcommands.InsertCommand;
-import com.infinityuniverse.sqlcommands.SelectCommand;
-import com.infinityuniverse.sqlcommands.UpdateCommand;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-/**
- * Основной класс для обработки запросов в SQL-подобном формате к коллекции в памяти.
- *
- * Реализует интерфейс Executor и хранит List<Map<String, Object>> в качестве хранилища.
- */
-public class SQLEmul implements Executor {
-
-    // "Таблица" в памяти: список строк, каждая строка — это Map с ключом (название колонки)
-    // и значением (Object).
-    private final List<Map<String, Object>> data;
-
-    /**
-     * Конструктор по умолчанию инициализирует пустую коллекцию данных.
-     */
-    public SQLEmul() {
-        this.data = new ArrayList<>();
-    }
-
-    /**
-     * Выполняет запрошенную команду в простом SQL-подобном формате
-     * (INSERT, UPDATE, DELETE, SELECT). Пример:
-     * "INSERT VALUES 'lastName'='Федоров', 'id'=3, 'age'=40, 'active'=true"
-     *
-     * @param request SQL-подобный запрос
-     * @return список строк, которые были найдены, изменены, вставлены или удалены
-     * @throws Exception если возникает проблема с именами колонок или типами данных
-     */
-    @Override
-    public List<Map<String, Object>> execute(String request) throws Exception {
-        if (request == null || request.trim().isEmpty()) {
-            throw new Exception("Запрос пуст");
-        }
-
-        // Приведение пробелов и перевод команды в верхний регистр
-        String trimmed = request.trim();
-        String upperRequest = trimmed.toUpperCase();
-
-        // Определяем тип команды по первому слову
-        Command command;
-        if (upperRequest.startsWith("INSERT")) {
-            command = new InsertCommand();
-        } else if (upperRequest.startsWith("UPDATE")) {
-            command = new UpdateCommand();
-        } else if (upperRequest.startsWith("DELETE")) {
-            command = new DeleteCommand();
-        } else if (upperRequest.startsWith("SELECT")) {
-            command = new SelectCommand();
-        } else {
-            throw new Exception("Неизвестный тип команды: " + request);
-        }
-
-        // Применяем логику команды к нашей коллекции данных
-        return command.applyCommand(request, data);
-    }
-
-    /**
-     * Возвращает внутренние данные для отладки или других задач.
-     *
-     * @return изменяемый список строк
-     */
-    public List<Map<String, Object>> getData() {
-        return data;
-=======
 import com.infinityuniverse.sqlcommands.*;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SQLEmul {
+/**
+ * Основной класс для обработки запросов в SQL-подобном формате к коллекции в памяти.
+ */
+public class SQLEmul implements Executor {
     private List<Map<String, Object>> data = new ArrayList<>();
 
     public SQLEmul() {
     }
 
+    @Override
     public List<Map<String, Object>> execute(String request) throws Exception {
         System.out.println("Executing request: " + request); // Debug print
         String normalizedRequest = request.trim().replaceAll("\\s+", " ");
@@ -128,7 +58,7 @@ public class SQLEmul {
         String valuesPart = matcher.group(1).trim();
         String wherePart = matcher.group(3);
         Map<String, Object> values = parseValues(valuesPart);
-        List<com.infinityuniverse.sqlcommands.Condition> whereConditions = parseWhereClause(wherePart);
+        List<Condition> whereConditions = parseWhereClause(wherePart);
         return new UpdateCommand(values, whereConditions);
     }
 
@@ -139,7 +69,7 @@ public class SQLEmul {
             throw new Exception("Invalid DELETE command");
         }
         String wherePart = matcher.group(2);
-        List<com.infinityuniverse.sqlcommands.Condition> whereConditions = parseWhereClause(wherePart);
+        List<Condition> whereConditions = parseWhereClause(wherePart);
         return new DeleteCommand(whereConditions);
     }
 
@@ -150,7 +80,7 @@ public class SQLEmul {
             throw new Exception("Invalid SELECT command");
         }
         String wherePart = matcher.group(2);
-        List<com.infinityuniverse.sqlcommands.Condition> whereConditions = parseWhereClause(wherePart);
+        List<Condition> whereConditions = parseWhereClause(wherePart);
         return new SelectCommand(whereConditions);
     }
 
@@ -198,8 +128,8 @@ public class SQLEmul {
         }
     }
 
-    private List<com.infinityuniverse.sqlcommands.Condition> parseWhereClause(String whereClause) throws Exception {
-        List<com.infinityuniverse.sqlcommands.Condition> conditions = new ArrayList<>();
+    private List<Condition> parseWhereClause(String whereClause) throws Exception {
+        List<Condition> conditions = new ArrayList<>();
         if (whereClause == null || whereClause.isEmpty()) {
             return conditions;
         }
@@ -217,6 +147,5 @@ public class SQLEmul {
             }
         }
         return conditions;
->>>>>>> master
     }
 }
