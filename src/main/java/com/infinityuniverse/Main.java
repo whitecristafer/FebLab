@@ -14,6 +14,12 @@ public class Main {
             );
             System.out.println("Результат INSERT: " + resultInsert);
 
+            // Пример: добавляем вторую запись в коллекцию
+            List<Map<String, Object>> resultInsert1 = sqlEmul.execute(
+                    "INSERT VALUES 'lastName'='Ширалиев', 'id'=4, 'age'=4032, 'active'=true"
+            );
+            System.out.println("Результат INSERT: " + resultInsert1);
+
             // Пример: обновляем запись с id=3
             List<Map<String, Object>> resultUpdate = sqlEmul.execute(
                     "UPDATE VALUES 'active'=false, 'cost'=10.1 WHERE 'id'=3"
