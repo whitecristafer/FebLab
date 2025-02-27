@@ -11,21 +11,26 @@ import java.util.Map;
  * Все строки, соответствующие условию WHERE, удаляются.
  * Удаленные строки возвращаются в результате.
  */
-public class DeleteCommand extends Command {
+public class DeleteCommand extends SQLCommand {
+    private List<Condition> whereConditions;
+
+    public DeleteCommand(List<Condition> whereConditions) {
+        this.whereConditions = whereConditions;
+    }
 
     @Override
-    public List<Map<String, Object>> applyCommand(String request, List<Map<String, Object>> data) throws Exception {
-        String upper = request.toUpperCase();
-        int idx = upper.indexOf("WHERE");
-        String wherePart = null;
-        if (idx >= 0) {
-            wherePart = request.substring(idx + "WHERE".length()).trim();
-        }
-
+    public List<Map<String, Object>> applyCommand(List<Map<String, Object>> data) throws Exception {
         List<Map<String, Object>> removed = new ArrayList<>();
         for (int i = 0; i < data.size(); ) {
             Map<String, Object> row = data.get(i);
-            if (matchesCondition(wherePart, row)) {
+            boolean matches = true;
+            for (Condition condition : whereConditions) {
+                if (!condition.evaluate(row)) {
+                    matches = false;
+                    break;
+                }
+            }
+            if (matches) {
                 removed.add(row);
                 data.remove(i);
             } else {

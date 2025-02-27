@@ -10,20 +10,25 @@ import java.util.Map;
  *
  * Возвращает все соответствующие строки. Если WHERE не указано, возвращает все строки.
  */
-public class SelectCommand extends Command {
+public class SelectCommand extends SQLCommand {
+    private List<Condition> whereConditions;
+
+    public SelectCommand(List<Condition> whereConditions) {
+        this.whereConditions = whereConditions;
+    }
 
     @Override
-    public List<Map<String, Object>> applyCommand(String request, List<Map<String, Object>> data) throws Exception {
-        String upper = request.toUpperCase();
-        int idx = upper.indexOf("WHERE");
-        String wherePart = null;
-        if (idx >= 0) {
-            wherePart = request.substring(idx + "WHERE".length()).trim();
-        }
-
+    public List<Map<String, Object>> applyCommand(List<Map<String, Object>> data) throws Exception {
         List<Map<String, Object>> result = new ArrayList<>();
         for (Map<String, Object> row : data) {
-            if (matchesCondition(wherePart, row)) {
+            boolean matches = true;
+            for (Condition condition : whereConditions) {
+                if (!condition.evaluate(row)) {
+                    matches = false;
+                    break;
+                }
+            }
+            if (matches) {
                 result.add(row);
             }
         }
